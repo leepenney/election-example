@@ -14,7 +14,7 @@
             </div>
 
             <div class="col mb-5">
-                <p>Are you planning to vote in this election?</p>
+                <p>Are you going to vote?</p>
 
                 <div class="form-check">
                     <input type="radio" id="voting_yes" value="1" name="voting" class="form-check-input" required v-model="voting" />
@@ -28,7 +28,7 @@
             </div>
 
             <div class="col mb-5">
-                <label for="party" class="form-label">Which party do you plan to vote for?</label>
+                <label for="party" class="form-label">Who are you going to vote for?</label>
                 <select v-model="party_selected" id="party" required class="form-select form-select-lg d-block">
                     <option disabled value="">Please select a party</option>
                     <option v-for="party in parties" v-bind:value="party.p_id">
