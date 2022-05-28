@@ -42,21 +42,21 @@ The list of parties is loaded from the parties table [source](https://www.parlia
 #### constituencies
 
 Column Name | Datatype
-- | -
+--- | ---
 c_id | VARCHAR
 c_name | VARCHAR
 
 #### parties
 
 Column Name | Datatype
-- | -
+--- | ---
 p_id | BIGIINT
 p_name | VARCHAR
 
 #### responses
 
 Column Name | Datatype
-- | -
+--- | ---
 r_id | BIGINT
 r_constituancy | VARCHAR
 r_voting | TINYINT
