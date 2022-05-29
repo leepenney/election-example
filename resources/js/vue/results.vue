@@ -24,5 +24,8 @@
     }
 </script>
 
-<style scoped>
+<style>
+    tr > th:nth-child(2), tr > td:nth-child(2) {
+        text-align: center;
+    }
 </style>
