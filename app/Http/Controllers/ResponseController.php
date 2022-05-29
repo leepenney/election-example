@@ -17,12 +17,19 @@ class ResponseController extends Controller
     public function index()
     {
         // get all responses with a join on the other tables
-        return Party::leftJoin('responses', 'r_party', 'p_id')
+
+        $notVoting = Response::selectRaw('"Not Voting" as p_name, COUNT(r_voting) AS votes')
+            ->where('r_voting', '=', 0);
+
+        $votingAndNot = Party::leftJoin('responses', 'r_party', 'p_id')
             ->select('p_name')
             ->selectRaw('COALESCE(SUM(r_voting), 0) AS votes')
             ->groupBy('p_name')
+            ->union($notVoting)
             ->orderBy('p_name')
             ->get();
+
+        return $votingAndNot;
     }
 
     /**
@@ -70,7 +77,12 @@ class ResponseController extends Controller
         (SELECT * FROM parties) AS partyNames)
         LEFT JOIN (SELECT r_constituency, r_party, COUNT(*) as votes FROM responses WHERE r_voting = 1 GROUP BY r_constituency, r_party) r 
         ON (r.r_constituency = c_id AND r.r_party = p_id)
-        ORDER BY c_name');
+        UNION
+        SELECT c_name, "Not Voting" AS p_name, votes
+        FROM constituencies
+        LEFT JOIN (SELECT r_constituency, COUNT(*) as votes FROM responses WHERE r_voting = 0 GROUP BY r_constituency) r 
+        ON (r.r_constituency = c_id)
+        ORDER BY c_name, p_name');
         return $votes;
     }
 

@@ -30,6 +30,7 @@ To install and run the app:
 * Backend framework: Laravel 8
 * Frontend framework: Vue 2
 * Database: MySQL
+* Styles: Bootstrap 4
 
 ## Data
 
