@@ -17,19 +17,20 @@
                 <p>Are you going to vote?</p>
 
                 <div class="form-check">
-                    <input type="radio" id="voting_yes" value="1" name="voting" class="form-check-input" required v-model="voting" />
+                    <input type="radio" id="voting_yes" value="1" name="voting" class="form-check-input" required v-model="voting" 
+                        v-on:click="showPartyDropdown = true" />
                     <label for="voting_yes" class="form-check-label">Yes</label>
                 </div>
 
                 <div class="form-check mb-5">
-                    <input type="radio" id="voting_no" value="0" name="voting" class="form-check-input" v-model="voting" />
+                    <input type="radio" id="voting_no" value="0" name="voting" class="form-check-input" v-model="voting" v-on:click="showPartyDropdown = false" />
                     <label for="voting_no" class="form-check-label">No</label>
                 </div>
             </div>
 
-            <div class="col mb-5">
+            <div class="col mb-5" v-show="showPartyDropdown">
                 <label for="party" class="form-label">Who are you going to vote for?</label>
-                <select v-model="party_selected" id="party" required class="form-select form-select-lg d-block">
+                <select v-model="party_selected" id="party" :required="showPartyDropdown ? true : false" class="form-select form-select-lg d-block">
                     <option disabled value="">Please select a party</option>
                     <option v-for="party in parties" v-bind:value="party.p_id">
                         {{ party.p_name }}
@@ -42,9 +43,6 @@
                 <input type="submit" value="Let Us Know" class="btn btn-primary mb-3" />
             </div>
         </form>
-        <div id="form-submitted" v-if="!showForm">
-            <p>Thanks, we have recorded your response.</p>
-        </div>
     </div>
 </template>
 
@@ -59,7 +57,8 @@
                 party_selected: '',
                 parties: [],
                 voting: '',
-                showForm: true
+                showForm: true,
+                showPartyDropdown: false
             }
         },
         methods: {
@@ -100,15 +99,12 @@
                         this.constituency_selected = '';
                         this.voting = '';
                         this.party_selected = '';
-                        this.showForm = false;
+                        this.$emit('submitted');
                     }
                 })
                 .catch(error => {
                     console.log('There was an error recording the response');
                 });
-            },
-            showSuccess() {
-
             }
         },
         created() {

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('r_id');
             $table->string('r_constituency');
             $table->boolean('r_voting');
-            $table->string('r_party');
+            $table->string('r_party')->nullable();
         });
     }
 
