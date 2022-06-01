@@ -5,12 +5,17 @@
                 <label for="constituency" class="form-label">Which constituency do you live in?</label>
                 <p class="small">If you don't know your constituency, 
                     you can <a href="https://members.parliament.uk/constituencies" target="_blank">use this tool</a> to look it up.</p>
-                <select v-model="constituency_selected" id="constituency" required class="form-select form-select-lg">
+                <input @click="showConstituences = true" type="text" id="constituency" name="constituency" 
+                    v-model="searchQuery" class="custom-select" placeholder="Search for your constituency">
+                <ul v-show="showConstituences">
+                    <li @click="selectConstituency(constituency)" v-for="constituency in filteredConstituences" v-bind:data-cid="constituency.c_id" :key="constituency.c_id">{{ constituency.c_name }}</li>
+                </ul>
+                <!--<select v-model="constituency_selected" id="constituency" required class="form-select form-select-lg">
                     <option disabled value="">Please select a constituency</option>
                     <option v-for="constituency in constituencies" v-bind:value="constituency.c_id">
                         {{ constituency.c_name }}
                     </option>
-                </select>
+                </select>-->
             </div>
 
             <div class="col mb-5">
@@ -30,7 +35,7 @@
 
             <div class="col mb-5" v-show="showPartyDropdown">
                 <label for="party" class="form-label">Who are you going to vote for?</label>
-                <select v-model="party_selected" id="party" :required="showPartyDropdown ? true : false" class="form-select form-select-lg d-block">
+                <select v-model="party_selected" id="party" :required="showPartyDropdown ? true : false" class="custom-select d-block">
                     <option disabled value="">Please select a party</option>
                     <option v-for="party in parties" v-bind:value="party.p_id">
                         {{ party.p_name }}
@@ -58,7 +63,9 @@
                 parties: [],
                 voting: '',
                 showForm: true,
-                showPartyDropdown: false
+                showPartyDropdown: false,
+                showConstituences: false,
+                searchQuery: ''
             }
         },
         methods: {
@@ -87,7 +94,7 @@
 
                 let theResponse = {
                     response: {
-                        constituency: this.constituency_selected,
+                        constituency: this.constituency_selected.c_id,
                         voting: this.voting,
                         party: this.party_selected
                     }
@@ -105,6 +112,20 @@
                 .catch(error => {
                     console.log('There was an error recording the response');
                 });
+            },
+            selectConstituency(constituency) {
+                this.constituency_selected = constituency;
+                this.searchQuery = constituency.c_name;
+                this.showConstituences = false;
+            }
+        },
+        computed: {
+            filteredConstituences() {
+                const query = this.searchQuery.toLowerCase();
+                if (query.length == 0) return this.constituencies;
+                return this.constituencies.filter((constituency) => {
+                    return Object.values(constituency).some((word) => String(word).toLowerCase().includes(query));
+                });
             }
         },
         created() {
@@ -121,5 +142,21 @@
     }
     p.small {
         font-size: 0.8em;
+    }
+    #response-form ul {
+        max-height: 10vh;
+        overflow-y: scroll;
+        list-style-type: none;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+    #response-form li {
+        cursor: pointer;
+        padding: 5px 0;
+        border-bottom: 1px solid #ccc;
+    }
+    #response-form li:hover {
+        background: #ccc;
     }
 </style>
