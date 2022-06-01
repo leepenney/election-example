@@ -2,7 +2,7 @@
 
 A simple form-based app to record visitor's intentions to vote in an upcoming (fictious) general election.
 
-The site is currently hosted at: [http://178.62.40.223/](http://178.62.40.223/)
+![Gif showing the election site](./public/img/election-example.gif)
 
 ## Installation
 
