@@ -23,7 +23,7 @@ To install and run the app:
 6. Create an empty database called *voting_poll*
 7. Update the *.env* file you created with details of the database connection
 8. Create the database tables using `php artisan migrate`
-9. (optional) Add example data to the tables using `php artisan db:seed`
+9. (optional) Import the constituences.csv file to the constituencies table
 
 ## Technologies used
 
